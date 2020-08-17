@@ -1,3 +1,4 @@
+var questionIndex = 0
 var questions = [
     {
         title: "Commonly used data types DO NOT include:",
@@ -10,7 +11,7 @@ var questions = [
         answer: "all of the above"
     },
     {
-        title: "String values must be encolsed within _____ when being assigned to variables.",
+        title: "String values must be enclosed within _____ when being assigned to variables.",
         choices: ["commas", "curly brackets", "quotes", "parenthesis"],
         answer: "quotes"
     },
@@ -21,44 +22,19 @@ var questions = [
     }
     ];
 
-var questionIndex = 0;
-var score = 0;
-var secondsRemaining = 60;
-var holdTime = 0;
-
-var timer = document.querySelector("#startTime");
-var questionsAsked = document.querySelector("#questionsAsked");
-var createUl = document.createElement("ul");
-
-timer.addEventListener("click", function () {
-    if (holdTime === 0) {
-        holdTime = setInterval(function () {
-            secondsLeft--;
-            timer.textContent = "Time: " + secondsLeft;
-
-            if (secondsLeft <= 0) {
-                clearInterval(holdTime);
-                allDone();
-                timer.textContent = "Time's up!";
-            }
-        }, 1000);
+    function displayQuestions (index) {
+        document.querySelector("#questionsAsked p").textContent=questions[index].title
+        var choices = document.querySelector("#answerChoices")
+        choices.innerHTML = ""
+        for (i=0; i<questions[index].choices.length; i++){
+            var listItem = document.createElement("li")
+            listItem.addEventListener ("click", function() {
+                displayQuestions(questionIndex)
+            })
+            listItem.textContent=questions[index].choices[i]
+            choices.appendChild(listItem)
+        }
+        questionIndex++
     }
-    render(questionIndex);
-});
 
-function render (questionIndex) {
-    questionsAsked.innerHTML = "";
-    createUl.innerHTML = "";
-    for (var i = 0; i < questions.length; i++) {
-        var userQuestion = questions[questionIndex].title;
-        var userChoices = questions[questionIndex].choices;
-        questionsAsked.textContent = userQuestion;
-    }
-    userChoices.forEach(function (newItem) {
-        var listItem = document.createElement("li");
-        listItem.textContent = newItem;
-        questionsAsked.appendChild(createUl);
-        createUl.appendChild(listItem);
-        listItem.addEventListener("click", (compare));
-    })
-}
+    displayQuestions(questionIndex);
